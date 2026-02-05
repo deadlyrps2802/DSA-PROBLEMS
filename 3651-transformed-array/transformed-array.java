@@ -5,18 +5,16 @@ class Solution {
          int i = 0;
          
         while(i<n){
-           if(nums[i] > 0){
-            int  k = (i+ nums[i])%n;
-            arr[i] = nums[k];
+           if(nums[i]==0){
+            arr[i] = nums[i];
            }
-            else if(nums[i] < 0){
+           
+            else {
                int z = (i + nums[i]%n + n)%n;
         
                 arr[i] = nums[z];
             }
-            else{
-                arr[i] = nums[i];
-            }
+        
           
             i++;
         }
