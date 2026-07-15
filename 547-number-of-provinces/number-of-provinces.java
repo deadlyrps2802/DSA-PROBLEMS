@@ -22,8 +22,9 @@ class Solution {
 
        for(int i = 0; i<V; i++){
         if(!vis[i]){
-            count++;
+            
             dfs(i,isConnected,vis);
+            count++;
         }
        }
       return count;
