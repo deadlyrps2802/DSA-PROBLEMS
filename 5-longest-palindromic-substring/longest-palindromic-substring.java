@@ -9,7 +9,7 @@ class Solution {
         int len2 = check(s,i,i+1);
      
     int maxlen = Math.max(len,len2);
-        if(maxlen>(end-start)){
+        if(maxlen>(end-start+1)){
             start = i - (maxlen -1)/2;
             end = i + maxlen/2;
         }
