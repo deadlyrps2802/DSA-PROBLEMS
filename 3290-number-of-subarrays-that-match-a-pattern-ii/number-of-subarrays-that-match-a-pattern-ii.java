@@ -2,74 +2,62 @@ class Solution {
     public int countMatchingSubarrays(int[] nums, int[] pattern) {
         int n = nums.length;
         int m = pattern.length;
+        
+        int[] txt = new int[n-1];
 
-        // Step 1: nums ke transitions nikal kar text array banao
-        // text array ki length (n - 1) hogi
-        int[] text = new int[n - 1];
-        for (int i = 0; i < n - 1; i++) {
-            text[i] = Integer.compare(nums[i + 1], nums[i]);
+        for(int i = 1; i<n; i++){
+            txt[i-1] = Integer.compare(nums[i],nums[i-1]);
         }
 
-        // Step 2: Pattern ka LPS (Longest Prefix Suffix) array compute karo
-        int[] lps = buildLPS(pattern);
 
-        // Step 3: KMP algorithm se text me pattern match count karo
-        int count = 0;
-        int i = 0; // Pointer for text
-        int j = 0; // Pointer for pattern
+        int[] LPS = new int[m];
 
-        while (i < text.length) {
-            // Agar elements match kar rahe hain, dono pointers aage badhao
-            if (text[i] == pattern[j]) {
+        int i = 1;
+        int prevLPS = 0;
+        LPS[0] = 0;
+
+        while(i<pattern.length){
+            if(pattern[i] == pattern[prevLPS]){
+                LPS[i] = prevLPS + 1;
                 i++;
-                j++;
+                prevLPS++;
             }
-
-            // Pura pattern match ho gaya
-            if (j == m) {
-                count++;
-                // Agle match ke liye smart jump (overlapping patterns handle karne ke liye)
-                j = lps[j - 1];
-            } 
-            // Mismatch case
-            else if (i < text.length && text[i] != pattern[j]) {
-                if (j != 0) {
-                    // Pattern pointer peeche fallback karega, text pointer (i) wahi rahega
-                    j = lps[j - 1];
-                } else {
-                    // Agar pehle hi element par mismatch hua, text me aage badho
-                    i++;
-                }
+            else if(prevLPS==0){
+               LPS[i] = 0;
+               i++;
+            }
+            else{
+                prevLPS = LPS[prevLPS-1];
             }
         }
 
-        return count;
+        return count(txt,pattern,LPS);
     }
 
-    // LPS Table helper function
-    private int[] buildLPS(int[] pattern) {
-        int m = pattern.length;
-        int[] lps = new int[m];
-        int len = 0; // Length of previous longest prefix suffix
-        int i = 1;
+    private int count(int[] txt, int[] pattern, int[] LPS){
+        int count = 0;
+        int i = 0;
+        int j = 0;
 
-        lps[0] = 0; // Single element ka LPS hamesha 0 hota hai
-
-        while (i < m) {
-            if (pattern[i] == pattern[len]) {
-                len++;
-                lps[i] = len;
+        while(i<txt.length){
+            if(txt[i] == pattern[j]){
                 i++;
-            } else {
-                if (len != 0) {
-                    len = lps[len - 1];
-                } else {
-                    lps[i] = 0;
-                    i++;
-                }
+                j++;
+                if(j==pattern.length){
+                    count++;
+                    j = LPS[j-1];
             }
+                
+            }
+            else if(j==0){
+                i++;
+            }
+            else{
+                j = LPS[j-1];
+            }
+           
+           
         }
-
-        return lps;
+        return count;
     }
 }
