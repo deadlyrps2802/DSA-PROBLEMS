@@ -42,25 +42,16 @@ public class Solution {
           }
            return s;
     }
-    public int lengthofcycle(ListNode head){
-   
-     ListNode fast = head;
-      ListNode slow = head;
-          
-          while(fast!=null && fast.next!= null){
-            slow = slow.next;
-            fast = fast.next.next;
-            if(slow ==  fast){
-                  int count = 0;
-                ListNode temp = slow;
-                do{
-                    temp = temp.next;
-                    count ++;
-                }while(temp!=slow);
-                return count;
-            }
-          }
-       return 0;      
+    public int lengthofcycle(ListNode slow){
+      ListNode temp = slow;
+       int length = 0; 
+
+       do{
+        temp = temp.next;
+        length++;
+       }while(temp!=slow);
+
+       return length;
     }
     
 }
